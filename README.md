@@ -4,18 +4,18 @@ spring.datasource.url=jdbc:mysql://<dbhost>:<dbport>/urotaxidb
 spring.datasource.username=<dbusername>
 spring.datasource.password=<dbpassword>
 
-docker network create urotaxinetwork
-docker volume create urotaxidbvol
+sudo docker network create urotaxinw
+sudo docker volume create urotaxidbvol
 
 # build the project
 mvn clean verify 
 
 # launch the mysql server docker container
-docker container run --name urotaximysqldb --network urotaxinetwork --mount type=volume,source=urotaxidbvol,target=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=welcome1 -d mysql:8.0.28
+sudo docker container run --name urotaximysqldb --network urotaxinw --mount type=volume,source=urotaxidbvol,target=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=welcome1 -d mysql:8.0.28
 
 #  create db schema on the mysql server instance
-docker cp src/main/db/urotaxidb.sql urotaximysqldb:/
-docker container exec -it urotaximysqldb bash
+sudo docker cp src/main/db/urotaxidb.sql urotaximysqldb:/
+sudo docker container exec -it urotaximysqldb bash
 
 # verify in docker container whether urotaxidb has been created or not
 mysql -uroot -pwelcome1
